@@ -82,8 +82,10 @@ public class MinhaConexao extends Thread{
 
     public static String styleInitialPage() {
         String serverName = "Desconhecido";
+        String ip = "0.0.0.0";
         try {
             serverName = InetAddress.getLocalHost().getHostName();
+            ip = InetAddress.getLocalHost().getHostAddress();
         } catch (Exception e) {
 
         }
@@ -100,6 +102,8 @@ public class MinhaConexao extends Thread{
                 " background:#8B4513;" +
                 " border:3px solid #5a2e0e;" +
                 "}" +
+                ".server-id { color: #d35400; font-weight: bold; font-family: monospace; }" +
+                ".footer { margin-top: 30px; padding: 10px; border-top: 1px solid #ccc; font-size: 0.9em; }" +
                 "</style>" +
                 "</head>" +
                 "<body>" +
@@ -110,7 +114,11 @@ public class MinhaConexao extends Thread{
                 "<a href='/door3'><div class='door'></div></a>" +
 
                 "<br>" +
-                "<div class='footer'>Respondido pelo servidor: <b>" + serverName + "</b></div>" +
+                "<div class='footer'>" +
+                "      Status: Ativo<br>" +
+                "      ID do Container: <span class='server-id'>" + serverName + "</span><br>" +
+                "      IP do Container: " + ip + "" +
+                "    </div>" +
 
                 "</body></html>";
     }
