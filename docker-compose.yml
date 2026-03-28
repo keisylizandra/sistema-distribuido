@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    image: meujavador-sd:latest
+    deploy:
+      replicas: 5
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8088:80"
+    depends_on:
+      - app
