@@ -1,13 +1,17 @@
-# Usando a imagem oficial mais recente do Java 17
-FROM eclipse-temurin:17-jdk
-
+FROM maven:3.9-eclipse-temurin AS build
 WORKDIR /app
 
-# Copia a sua pasta src inteira para dentro do container
-COPY src/ ./src/
+COPY pom.xml .
+RUN mvn -B -DskipTests dependency:go-offline
 
-# Procura todos os arquivos .java dentro de src e compila todos de uma vez
-RUN find src -name "*.java" > sources.txt && javac -encoding UTF-8 -d . @sources.txt
+COPY src ./src
+RUN mvn -B -DskipTests clean package
 
-# Roda o seu servidor
-CMD ["java", "-cp", ".", "sd.Servidor"]
+# Etapa 2: runtime mais leve
+FROM eclipse-temurin:25-jre
+WORKDIR /app
+
+COPY --from=build /app/target/classes ./classes
+EXPOSE 1234
+
+CMD ["java", "-cp", "classes", "sd.Servidor"]
